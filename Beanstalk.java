@@ -57,6 +57,49 @@ public class Beanstalk {
     return job;
  }
 
+  // returns server stats yaml file
+  public String stats() {
+    String header = "";
+    String read = "";
+    String[] ray = null;
+    Integer bytes;
+    int ch, total = 0;
+
+    try {
+      wr.write("stats\r\n");
+      wr.flush();
+
+      header = in.readLine();
+      ray = header.split(" ");
+      bytes = Integer.parseInt(ray[1]);
+
+      int bytesRead=0;
+      char[] input = new char[bytes];
+      while (bytesRead < bytes) {
+        int result = in.read(input, bytesRead, bytes - bytesRead);
+        if (result == -1) break;
+        bytesRead += result;
+      }
+
+      read = new String(input);
+    } catch (Exception e) {}
+
+    return read;
+  }
+
+  // returns number of jobs pending in queue
+  public Integer jobsReady() {
+    String stats = stats();
+    String[] ray = null;
+    
+    ray = stats.split("\n");
+   
+    stats = ray[8];
+    ray = stats.split(": ");
+    
+    return Integer.parseInt(ray[1]);
+  }
+
   //deletes job number id from the queue
   public void deleteJob(Integer id) {
     //delete job
