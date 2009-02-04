@@ -1,0 +1,18 @@
+well, as always I pick a pretty common name like 'Jack'
+to name a software project and it turns out that there
+are thousands of projects already named this out there..
+
+fuck it..
+
+
+we'll change the name here soon
+
+compile:
+  javac *.java
+
+run:
+  java Jack
+
+obviously we are missing 90% of the api support but
+this gets us going (at least it gets me going on my
+project ;) )
