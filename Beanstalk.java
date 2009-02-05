@@ -1,3 +1,5 @@
+package com.bluffware;
+
 import java.io.*;
 import java.net.*;
 import java.lang.*;
@@ -51,6 +53,8 @@ public class Beanstalk {
         bytesRead += result;
       }
 
+      System.out.println(in.read());
+      System.out.println(in.read());
       job.msg = new String(input);
     } catch(Exception e) {}
  
@@ -102,10 +106,15 @@ public class Beanstalk {
 
   //deletes job number id from the queue
   public void deleteJob(Integer id) {
+    String retval = "";
+
     //delete job
     try {
       wr.write("delete " + id + "\r\n");
       wr.flush();
+
+    retval = in.readLine();
+    System.out.println("ret. value: " + retval);
 
     //debug?
     System.out.println("deleting job " + id + " from queue.");
