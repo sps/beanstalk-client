@@ -13,6 +13,10 @@ compile:
 run:
   java Jack
 
+test:
+  beanstalkd -d -l 127.0.0.1 -p 11300
+  java -cp "/$HOME/junit-4.5.jar:." org.junit.runner.JUnitCore TestBeanstalk
+
 obviously we are missing 90% of the api support but
 this gets us going (at least it gets me going on my
 project ;) )

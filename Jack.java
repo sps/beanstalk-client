@@ -12,7 +12,7 @@ public class Jack {
     //job = bean.getJob();
    
     //return the number of jobs pending
-    //System.out.println(bean.jobsReady());
+    System.out.println(bean.jobsReady());
  
     //debug output?
     //System.out.println("processing job #: " + job.id + "\r");
