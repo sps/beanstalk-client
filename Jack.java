@@ -8,11 +8,11 @@ public class Jack {
     
     //connect to queue and grab a job
     Beanstalk bean = new Beanstalk();
-    //Job job = new Job();
-    //job = bean.getJob();
+    Job job = new Job();
+    job = bean.getJob();
    
     //return the number of jobs pending
-    System.out.println(bean.jobsReady());
+    //System.out.println(bean.jobsReady());
  
     //debug output?
     //System.out.println("processing job #: " + job.id + "\r");
@@ -21,7 +21,7 @@ public class Jack {
     //do some work here..
 
     //delete job
-    //bean.deleteJob(job.id);
+    bean.deleteJob(job.id);
 
     //close our connection
     bean.close();

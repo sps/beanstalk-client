@@ -1,5 +1,3 @@
-package com.bluffware;
-
 import java.io.*;
 import java.net.*;
 import java.lang.*;
@@ -14,7 +12,7 @@ public class Beanstalk {
      try {
         bsock = new Socket("127.0.0.1", 11300);
         wr = new OutputStreamWriter(bsock.getOutputStream());
-        in = new BufferedReader(new InputStreamReader(bsock.getInputStream()));
+        //in = new BufferedReader(new InputStreamReader(bsock.getInputStream()));
     } catch (Exception e) {
         System.out.println("fucked");
         System.exit(1);
@@ -36,27 +34,32 @@ public class Beanstalk {
     Job job = new Job();
  
     try {
-      job.header = in.readLine();
- 
-      //grab the bytes to be read and the id
-      job.header = job.header.substring(9);
-      temp = job.header.split(" ");
-      job.id = Integer.parseInt(temp[0]);
-      job.bytes = Integer.parseInt(temp[1]);
 
-     
       int bytesRead=0;
-      char[] input = new char[job.bytes];
-      while (bytesRead < job.bytes) {
-        int result = in.read(input, bytesRead, job.bytes - bytesRead);
-        if (result == -1) break;
+      InputStream istream = bsock.getInputStream();
+      int avail = istream.available();
+      byte[] input = new byte[avail];
+      while(bytesRead < avail) {
+        int result = istream.read(input, bytesRead, avail - bytesRead);
+        if(result == -1) break;
         bytesRead += result;
       }
 
-      System.out.println(in.read());
-      System.out.println(in.read());
-      job.msg = new String(input);
-    } catch(Exception e) {}
+      String stuff = new String(input);
+      int hend = stuff.indexOf("\r\n");
+      job.header = stuff.substring(0, hend);
+      temp = job.header.split(" ");
+      job.id = Integer.parseInt(temp[1]);
+      job.bytes = Integer.parseInt(temp[2]);
+
+      job.msg = stuff.substring(hend+2, stuff.length()-2);
+
+      //System.out.println("header: " + job.header);
+      //System.out.println("id: " + job.id);
+      //System.out.println("bytes: " + job.bytes);
+      //System.out.println("msg: " + job.msg);
+
+    } catch(Exception e) { System.out.println(e); }
  
     return job;
  }
@@ -113,11 +116,20 @@ public class Beanstalk {
       wr.write("delete " + id + "\r\n");
       wr.flush();
 
-    retval = in.readLine();
-    System.out.println("ret. value: " + retval);
+      int bytesRead=0;
+      InputStream istream = bsock.getInputStream();
+      int avail = istream.available();
+      byte[] input = new byte[avail];
+      while(bytesRead < avail) {
+        int result = istream.read(input, bytesRead, avail - bytesRead);
+        if(result == -1) break;
+        bytesRead += result;
+      }
 
-    //debug?
-    System.out.println("deleting job " + id + " from queue.");
+      String stuff = new String(input);
+
+      System.out.println(stuff);
+
    } catch (Exception e) {}
   }
 
