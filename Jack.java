@@ -10,22 +10,22 @@ public class Jack {
     Beanstalk bean = new Beanstalk();
 
     //put a job in..
-    //bean.putJob("dog");
+    bean.putJob("€");
 
-    Job job = new Job();
-    job = bean.getJob();
+    //Job job = new Job();
+    //job = bean.getJob();
    
     //return the number of jobs pending
     //System.out.println(bean.jobsReady());
  
     //debug output?
-    System.out.println("processing job #: " + job.id + "\r");
-    System.out.println("job txt: " + job.msg + "\r");
+    //System.out.println("processing job #: " + job.id + "\r");
+    //System.out.println("job txt: " + job.msg + "\r");
 
     //do some work here..
 
     //delete job
-    bean.deleteJob(job.id);
+    //bean.deleteJob(job.id);
 
     //close our connection
     bean.close();
