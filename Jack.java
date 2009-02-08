@@ -8,6 +8,10 @@ public class Jack {
     
     //connect to queue and grab a job
     Beanstalk bean = new Beanstalk();
+
+    //put a job in..
+    //bean.putJob("dog");
+
     Job job = new Job();
     job = bean.getJob();
    

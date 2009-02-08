@@ -19,7 +19,15 @@ public class Beanstalk {
     
   }
 
-  public Integer putJob() {
+  public Integer putJob(String body) {
+    Integer len = body.length();
+
+    try {
+      wr.write("put 65536 0 120 " + len + "\r\n" +
+              body + "\r\n");
+      wr.flush();
+    } catch(Exception e) { System.out.println(e);}
+
     return 0;
   }
 
