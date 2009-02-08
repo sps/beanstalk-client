@@ -15,8 +15,8 @@ public class Jack {
     //System.out.println(bean.jobsReady());
  
     //debug output?
-    //System.out.println("processing job #: " + job.id + "\r");
-    //System.out.println("job txt: " + job.msg + "\r");
+    System.out.println("processing job #: " + job.id + "\r");
+    System.out.println("job txt: " + job.msg + "\r");
 
     //do some work here..
 

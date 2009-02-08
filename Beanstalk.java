@@ -12,12 +12,15 @@ public class Beanstalk {
      try {
         bsock = new Socket("127.0.0.1", 11300);
         wr = new OutputStreamWriter(bsock.getOutputStream());
-        //in = new BufferedReader(new InputStreamReader(bsock.getInputStream()));
     } catch (Exception e) {
         System.out.println("fucked");
         System.exit(1);
     }
     
+  }
+
+  public Integer putJob() {
+    return 0;
   }
 
   // grab a new job from the queue
@@ -35,17 +38,7 @@ public class Beanstalk {
  
     try {
 
-      int bytesRead=0;
-      InputStream istream = bsock.getInputStream();
-      int avail = istream.available();
-      byte[] input = new byte[avail];
-      while(bytesRead < avail) {
-        int result = istream.read(input, bytesRead, avail - bytesRead);
-        if(result == -1) break;
-        bytesRead += result;
-      }
-
-      String stuff = new String(input);
+      String stuff = bytesRead();
       int hend = stuff.indexOf("\r\n");
       job.header = stuff.substring(0, hend);
       temp = job.header.split(" ");
@@ -116,28 +109,37 @@ public class Beanstalk {
       wr.write("delete " + id + "\r\n");
       wr.flush();
 
-      int bytesRead=0;
-      InputStream istream = bsock.getInputStream();
-      int avail = istream.available();
-      byte[] input = new byte[avail];
-      while(bytesRead < avail) {
-        int result = istream.read(input, bytesRead, avail - bytesRead);
-        if(result == -1) break;
-        bytesRead += result;
-      }
-
-      String stuff = new String(input);
+      String stuff = bytesRead();
 
       System.out.println(stuff);
 
    } catch (Exception e) {}
   }
 
+  public String bytesRead() {
+      int bytesRead=0;
+      String read = "";
+
+      try {
+        InputStream istream = bsock.getInputStream();
+        int avail = istream.available();
+        byte[] input = new byte[avail];
+        while(bytesRead < avail) {
+          int result = istream.read(input, bytesRead, avail - bytesRead);
+          if(result == -1) break;
+          bytesRead += result;
+        }
+
+        read = new String(input);
+      } catch(Exception e) {}
+
+    return read;
+  }
+
   //closes out our connection
   public void close() {
     try {
       wr.close();
-      in.close();
       bsock.close();
     } catch (Exception e) {}
  
