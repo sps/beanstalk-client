@@ -20,12 +20,14 @@ public class Beanstalk {
   }
 
   public Integer putJob(String body) {
-    Integer len = body.length();
+   byte[] byteray = body.getBytes();
+   Integer len = byteray.length;
 
     try {
-      wr.write("put 65536 0 120 " + len + "\r\n" +
+      byteWrite("put 65536 0 120 " + len + "\r\n" +
               body + "\r\n");
-      wr.flush();
+      String stuff = byteRead();
+
     } catch(Exception e) { System.out.println(e);}
 
     return 0;
@@ -35,18 +37,19 @@ public class Beanstalk {
   // returns: the job
   public Job getJob() {
     String read = "";
+
     int ch, total=0;
 
     try {
-      wr.write("reserve\r\n");
-      wr.flush();
+      byteWrite("reserve\r\n");
     } catch(Exception e) {}
 
     Job job = new Job();
  
     try {
 
-      String stuff = bytesRead();
+      String stuff = byteRead();
+
       int hend = stuff.indexOf("\r\n");
       job.header = stuff.substring(0, hend);
       temp = job.header.split(" ");
@@ -65,6 +68,7 @@ public class Beanstalk {
     return job;
  }
 
+  //currently not working
   // returns server stats yaml file
   public String stats() {
     String header = "";
@@ -74,8 +78,7 @@ public class Beanstalk {
     int ch, total = 0;
 
     try {
-      wr.write("stats\r\n");
-      wr.flush();
+      byteWrite("stats\r\n");
 
       header = in.readLine();
       ray = header.split(" ");
@@ -114,23 +117,26 @@ public class Beanstalk {
 
     //delete job
     try {
-      wr.write("delete " + id + "\r\n");
-      wr.flush();
+      byteWrite("delete " + id + "\r\n");
 
-      String stuff = bytesRead();
-
-      System.out.println(stuff);
+      String stuff = byteRead();
 
    } catch (Exception e) {}
   }
 
-  public String bytesRead() {
+  // reads in bytes on inputstream for utf8
+  public String byteRead() {
       int bytesRead=0;
       String read = "";
 
       try {
         InputStream istream = bsock.getInputStream();
-        int avail = istream.available();
+        int avail = 0;
+        while(avail == 0) {
+          avail = istream.available();
+        }
+
+
         byte[] input = new byte[avail];
         while(bytesRead < avail) {
           int result = istream.read(input, bytesRead, avail - bytesRead);
@@ -142,6 +148,19 @@ public class Beanstalk {
       } catch(Exception e) {}
 
     return read;
+  }
+
+  // converts msg to byte array first for utf8
+  public void byteWrite(String msg) {
+      int bytesRead=0;
+      String read = "";
+      byte[] byteray = msg.getBytes();
+ 
+      try {
+        OutputStream ostream = bsock.getOutputStream();
+        ostream.write(byteray);
+      } catch(Exception e) {}
+
   }
 
   //closes out our connection

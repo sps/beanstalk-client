@@ -38,6 +38,7 @@ public class TestBeanstalk {
     Job job = new Job();
     job = bean.getJob();
     bean.deleteJob(job.id);
+    bean.close();
   }
 
   //make sure our getJob can handle utf8 characters
@@ -48,6 +49,7 @@ public class TestBeanstalk {
     bean.putJob("€");
     job = bean.getJob();
     assertEquals("€", job.msg);
+    bean.close();
   }
 
   @Test
