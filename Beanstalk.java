@@ -19,6 +19,8 @@ public class Beanstalk {
     
   }
 
+  // takes a string, inserts
+  // FUTURE: should return either the string or a true/false
   public Integer putJob(String body) {
    byte[] byteray = body.getBytes();
    Integer len = byteray.length;
@@ -68,7 +70,7 @@ public class Beanstalk {
     return job;
  }
 
-  //currently not working
+  //currently NOT working
   // returns server stats yaml file
   public String stats() {
     String header = "";

@@ -1,16 +1,17 @@
-well, as always I pick a pretty common name like 'Jack'
-to name a software project and it turns out that there
-are thousands of projects already named this out there..
+Jackoff : Java BeanClient Client Api (not done yet)
+--------------------------------------------
 
-fuck it..
+What is BeanStalkd?
+http://xph.us/software/beanstalkd/
 
-
-we'll change the name here soon
+Download Junit:
+  wget http://www.jarfinder.com/index.php/jars/versionInfo/42784
 
 compile:
-  javac *.java
+  javac -cp "/$HOME/junit-4.5.jar:." *.java
 
-run:
+run sample app:
+  beanstalkd -d -l 127.0.0.1 -p 11300
   java Jack
 
 test:
