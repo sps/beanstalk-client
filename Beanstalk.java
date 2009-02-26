@@ -26,9 +26,10 @@ public class Beanstalk {
    Integer len = byteray.length;
 
     try {
+      DataInputStream dis = new DataInputStream(bsock.getInputStream());
       byteWrite("put 65536 0 120 " + len + "\r\n" +
               body + "\r\n");
-      String stuff = byteRead();
+      String stuff = dis.readLine();
 
     } catch(Exception e) { System.out.println(e);}
 
@@ -49,69 +50,18 @@ public class Beanstalk {
     Job job = new Job();
  
     try {
-
-      String stuff = byteRead();
-
-      int hend = stuff.indexOf("\r\n");
-      job.header = stuff.substring(0, hend);
+      DataInputStream dis = new DataInputStream(bsock.getInputStream());
+      job.header = dis.readLine();
       temp = job.header.split(" ");
       job.id = Integer.parseInt(temp[1]);
       job.bytes = Integer.parseInt(temp[2]);
 
-      job.msg = stuff.substring(hend+2, stuff.length()-2);
-
-      //System.out.println("header: " + job.header);
-      //System.out.println("id: " + job.id);
-      //System.out.println("bytes: " + job.bytes);
-      //System.out.println("msg: " + job.msg);
+      job.msg = byteRead(bsock, job.bytes+2);
 
     } catch(Exception e) { System.out.println(e); }
  
     return job;
  }
-
-  //currently NOT working
-  // returns server stats yaml file
-  public String stats() {
-    String header = "";
-    String read = "";
-    String[] ray = null;
-    Integer bytes;
-    int ch, total = 0;
-
-    try {
-      byteWrite("stats\r\n");
-
-      header = in.readLine();
-      ray = header.split(" ");
-      bytes = Integer.parseInt(ray[1]);
-
-      int bytesRead=0;
-      char[] input = new char[bytes];
-      while (bytesRead < bytes) {
-        int result = in.read(input, bytesRead, bytes - bytesRead);
-        if (result == -1) break;
-        bytesRead += result;
-      }
-
-      read = new String(input);
-    } catch (Exception e) {}
-
-    return read;
-  }
-
-  // returns number of jobs pending in queue
-  public Integer jobsReady() {
-    String stats = stats();
-    String[] ray = null;
-    
-    ray = stats.split("\n");
-   
-    stats = ray[8];
-    ray = stats.split(": ");
-    
-    return Integer.parseInt(ray[1]);
-  }
 
   //deletes job number id from the queue
   public void deleteJob(Integer id) {
@@ -119,25 +69,19 @@ public class Beanstalk {
 
     //delete job
     try {
+      DataInputStream dis = new DataInputStream(bsock.getInputStream());
       byteWrite("delete " + id + "\r\n");
+      String stuff = dis.readLine();
 
-      String stuff = byteRead();
-
-   } catch (Exception e) {}
+    } catch (Exception e) {}
   }
 
-  // reads in bytes on inputstream for utf8
-  public String byteRead() {
+  public static String byteRead(Socket blah, int avail) {
       int bytesRead=0;
       String read = "";
 
       try {
-        InputStream istream = bsock.getInputStream();
-        int avail = 0;
-        while(avail == 0) {
-          avail = istream.available();
-        }
-
+        InputStream istream = blah.getInputStream();
 
         byte[] input = new byte[avail];
         while(bytesRead < avail) {
