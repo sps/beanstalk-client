@@ -18,6 +18,8 @@ Required:
 build:
   mvn clean package
   this will generate 2 jars: one with the required dependencies and one standalone without the deps
+  build the apidocs: mvn javadoc:javadoc && open target/site/apidocs/index.html
+  mvn install (if you plan on using this as a dependency in another maven project) 
 
 run the builtin example worker:
     start beanstalkd ( beanstalkd -l 0.0.0.0 -p 11300 )

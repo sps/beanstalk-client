@@ -11,7 +11,7 @@ public class BeanstalkException extends Exception {
     }
 
     public BeanstalkException(Throwable t) {
-        super(t.fillInStackTrace());
+        super(t);
     }
 
 

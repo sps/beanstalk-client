@@ -91,10 +91,10 @@ public class Beanstalk {
     /**
      * TODO: finish javadocs
      * @param body - the job data
-     * @param priority
-     * @param delay
-     * @param ttr
-     * @return
+     * @param priority job priority
+     * @param delay delay before job becomes available
+     * @param ttr time to run
+     * @return the job id
      * @throws us.xph.beanstalk.BeanstalkException
      */
     public Integer putJob(String body, Integer priority, Integer delay, Integer ttr) throws BeanstalkException {
