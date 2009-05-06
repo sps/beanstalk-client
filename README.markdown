@@ -5,11 +5,16 @@ What is Beanstalkd?
 http://xph.us/software/beanstalkd/
 
 Currently supported operations:
-- put job
-- reserve jobs
-- delete jobs
 - use tube
 - watch tube
+- ignore tube
+- put job
+- reserve jobs
+- reserve jobs with timeout
+- delete jobs
+- release jobs
+- bury jobs
+- kick jobs
 
 Required:
 - [Java 1.6](http://developers.sun.com/downloads/)
