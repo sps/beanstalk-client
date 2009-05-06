@@ -328,6 +328,19 @@ public class BeanstalkTest {
     }
 
     @Test
+    public void testKick() throws Exception {
+        final String[] response = {"KICKED", "5"};
+        context.checking(new Expectations() {
+
+            {
+                one(socketClient).byteWriteWithTokenizedResponse(with(any(String.class)));
+                will(returnValue(response));
+            }
+        });
+        bean.kickJobs(12);
+    }
+
+    @Test
     public void testClose() {
         context.checking(new Expectations() {
 

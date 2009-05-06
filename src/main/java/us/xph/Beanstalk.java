@@ -328,6 +328,27 @@ public class Beanstalk {
         return returnVal;
     }
 
+    /**
+     * @param bound An integer upper bound on the number of jobs to kick.
+     * @return number of jobs kicked
+     * @throws us.xph.beanstalk.BeanstalkException
+     */
+    public int kickJobs(Integer bound) throws BeanstalkException {
+        int returnVal = 0;
+
+        String[] response = socketClient.byteWriteWithTokenizedResponse("kick " + bound  +"\r\n");
+
+        if(checkResponseLength(response, 2)){
+            if(response[0].startsWith("KICKED")){
+                returnVal = Integer.parseInt(response[1]);
+            } else {
+                throw new BeanstalkException("Unexpected server response: "+response[0]);
+            }
+        }
+
+        return returnVal;
+    }
+
     public void close() {
         socketClient.close();
     }
