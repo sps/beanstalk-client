@@ -13,7 +13,7 @@ public class Jack {
         //Job job = new Job();
 
         while (running == 1) {
-            Job job = bean.getJob();
+            Job job = bean.getJob(2);
             //debug output?
             System.out.println("processing job #: " + job.getId() + "\r");
             System.out.println("job txt: " + job.getMsg() + "\r");
